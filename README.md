@@ -34,11 +34,46 @@ Create a `.github/workflows` directory in the root of your repository.
 
 ### 4. Configure GitHub Actions Workflow
 
-Create a YAML file (e.g., `ci.yml`) within the `.github/workflows` directory to define your CI workflow. Below is an example:
+Create a YAML file (e.g., `go.yml`) within the `.github/workflows` directory to define your CI workflow. Below is an example:
 
 ```yaml
-name: CI
+name: Go
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - name: Build DB
+      run: docker-compose build
+
+    - name: Create DB
+      run: docker-compose up -d
+
+    - name: Test
+      run: go test -v main_test.go
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build
+      run: go build -v main.go
 ```
 
 ### 5. Push to GitHub
