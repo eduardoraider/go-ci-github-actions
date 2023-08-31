@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Build
       run: go build -v main.go
 ```
