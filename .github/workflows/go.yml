@@ -48,6 +48,12 @@ jobs:
     - name: Build
       run: go build -v main.go
 
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.2
+      with:
+        name: go-app-demo
+        path: main
+
   docker:
     needs: build
     uses: ./.github/workflows/Docker.yml
